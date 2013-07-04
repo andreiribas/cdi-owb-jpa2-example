@@ -37,7 +37,6 @@ import javax.inject.Inject;
 
 import org.apache.webbeans.config.WebBeansContext;
 import org.apache.webbeans.spi.ContainerLifecycle;
-import org.junit.After;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
@@ -68,7 +67,7 @@ public class OWBJUnit4Runner extends BlockJUnit4ClassRunner {
         
         long endCdiTime = System.nanoTime();
         
-        System.out.println(String.format("OWB setup in %d seconds.", TimeUnit.NANOSECONDS.toSeconds(endCdiTime - startCdiTime)));
+        System.out.println(String.format("OWB setup in %d miliseconds.", TimeUnit.NANOSECONDS.toMillis(endCdiTime - startCdiTime)));
                 
     }
     
@@ -96,13 +95,13 @@ public class OWBJUnit4Runner extends BlockJUnit4ClassRunner {
         
         		long beanResolutionStartTime = System.nanoTime();
                         		
-        		Object fieldValueInjectedFromWeld = getBeanInstance(fieldType);
+        		Object fieldValueInjectedFromCdi = getBeanInstance(fieldType);
         		
         		long beanResolutionEndTime = System.nanoTime();
         		
-        		System.out.println(String.format("Bean resolution of class %s in %d seconds.", fieldType.getSimpleName(), TimeUnit.NANOSECONDS.toSeconds(beanResolutionEndTime - beanResolutionStartTime)));
+        		System.out.println(String.format("Bean resolution of class %s in %d miliseconds.", fieldType.getSimpleName(), TimeUnit.NANOSECONDS.toMillis(beanResolutionEndTime - beanResolutionStartTime)));
                 
-        		field.set(testInstance, fieldValueInjectedFromWeld);
+        		field.set(testInstance, fieldValueInjectedFromCdi);
         	
         	}
         	
@@ -128,11 +127,5 @@ public class OWBJUnit4Runner extends BlockJUnit4ClassRunner {
     	return contextualReference;
     	
     }
-  
-    
-    @After
-    public void stopApp() {
-        container.stopApplication(null);
-    }
-    
+      
 }
